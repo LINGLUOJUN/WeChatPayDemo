@@ -102,7 +102,7 @@ public class WechatPayServiceImpl implements WechatPayService {
 
 
             BufferedOutputStream buffOutStr = new BufferedOutputStream(conn.getOutputStream());
-            buffOutStr.write(orderInfo.getBytes());
+            buffOutStr.write(orderInfo.getBytes("utf-8"));
             buffOutStr.flush();
             buffOutStr.close();
 
