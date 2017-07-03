@@ -23,7 +23,7 @@ public class WxPayConfig {
 	private static String subMchID = "";
 
 	//HTTPS证书的本地路径
-	private static String certLocalPath = "E:\\ideaProject\\WeChatPayDemo\\src\\main\\resources\\apiclient_cert.pem";
+	private static String certLocalPath = "E:\\project\\mine\\WeChatPayDemo\\src\\main\\resources\\apiclient_cert.pem";
 
 	//HTTPS证书密码，默认密码等于商户号MCHID
 	private static String certPassword = "1225312702";

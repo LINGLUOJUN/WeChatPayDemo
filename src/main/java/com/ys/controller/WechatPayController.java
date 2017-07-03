@@ -6,6 +6,7 @@ import com.google.zxing.*;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.ys.service.WechatPayService;
+import com.ys.service.WechatPayService1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import java.util.Hashtable;
 public class WechatPayController {
 
    @Autowired
-    private WechatPayService wechatPayService;
+    private WechatPayService1 wechatPayService;
 
 
 	/**
@@ -35,7 +36,7 @@ public class WechatPayController {
      */
 	@RequestMapping("createQRCode")
 	public void createQRCode( HttpServletResponse response) {
-		String tempOrderId="xxxxxabcabd123456ddbd";
+		String tempOrderId="xxx123abcabd123456ddbd";
          //生成订单信息
 		String orderInfo= null;
 		try {

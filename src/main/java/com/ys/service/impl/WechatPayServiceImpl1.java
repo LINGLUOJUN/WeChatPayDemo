@@ -2,6 +2,7 @@ package com.ys.service.impl;
 
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.ys.constant.WxPayConfig;
@@ -43,8 +44,8 @@ public class WechatPayServiceImpl1 implements WechatPayService1 {
         wxPayUnifiedOrderReqData.setBody(new String(body.getBytes("ISO-8859-1") ,"UTF-8"));//商品描述*/
         String body = "这个是中文描述";
         //String body="THE IS description";
-         //wxPayUnifiedOrderReqData.setBody(body);
-        wxPayUnifiedOrderReqData.setBody(URLEncoder.encode(body, "UTF-8"));//商品描述  这个是正确的
+         wxPayUnifiedOrderReqData.setBody(body);
+//        wxPayUnifiedOrderReqData.setBody(URLEncoder.encode(body, "UTF-8"));//商品描述  这个是正确的
         wxPayUnifiedOrderReqData.setOut_trade_no(orderId);//商户订单号
 
         //TODO 关于金额这里应该需要调用 用户的
@@ -55,11 +56,14 @@ public class WechatPayServiceImpl1 implements WechatPayService1 {
         wxPayUnifiedOrderReqData.setTrade_type("NATIVE");//JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付
         wxPayUnifiedOrderReqData.setSign(Signature.getSign(wxPayUnifiedOrderReqData));//签名
 
-        //将订单对象转换为xml格式
+/*        //将订单对象转换为xml格式
         XStream xStream = new XStream(new XppDriver(new XmlFriendlyNameCoder("_-", "_")));
         //  XStream xStream = new XStream(new XppDriver(new XmlFriendlyNameCoder("_-", "_")));
         xStream.alias("xml", WxPayUnifiedOrderReqData.class);
         // wxPayUnifiedOrderReqData.toString().
+        return xStream.toXML(wxPayUnifiedOrderReqData);*/
+        XStream xStream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
+        xStream.alias("xml", WxPayUnifiedOrderReqData.class);
         return xStream.toXML(wxPayUnifiedOrderReqData);
     }
 
@@ -71,33 +75,36 @@ public class WechatPayServiceImpl1 implements WechatPayService1 {
      */
     @Override
     public String createQRCodeUrl(String orderInfo) {
-        try {
+/*        try {
             orderInfo=new String(orderInfo.getBytes(), "ISO8859-1");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
+        }*/
         String url = WxPayConfig.PAY_UNIFIED_ORDER_API;//统一下单的url
 
         try {
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             //加入数据
             conn.setRequestMethod("POST");
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
+            conn.setRequestProperty("Content-type", "text/html");
+            conn.setRequestProperty("ContentType", "utf-8");
+            conn.setRequestProperty("Charset", "UTF-8");
             conn.setDoOutput(true);
-        /*	conn.setRequestProperty("Accept-Charset", "UTF-8");
+        	/*conn.setRequestProperty("Accept-Charset", "UTF-8");
 			conn.setRequestProperty("Content-type", "text/html");
 			conn.setRequestProperty("contentType", "utf-8");*/
 
-           /* conn.setRequestProperty("Accept-Charset", "UTF-8");
-            conn.setRequestProperty("Content-type", "text/html");
-            conn.setRequestProperty("contentType", "utf-8");*/
+
+
 
             BufferedOutputStream buffOutStr = new BufferedOutputStream(conn.getOutputStream());
-            buffOutStr.write(orderInfo.getBytes());
+            buffOutStr.write(orderInfo.getBytes("utf-8"));
             buffOutStr.flush();
             buffOutStr.close();
 
             //获取输入流
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
             String line;//按行获取输入流
             StringBuffer sb = new StringBuffer();

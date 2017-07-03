@@ -79,11 +79,11 @@ public class WechatPayServiceImpl implements WechatPayService {
     @Override
     public String createQRCodeUrl(String orderInfo) {
         String url = WxPayConfig.PAY_UNIFIED_ORDER_API;//统一下单的url
-        try {
+ /*       try {
             orderInfo=  new String(orderInfo.getBytes("utf-8"), "iso8859-1");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
+        }*/
 
         try {
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
